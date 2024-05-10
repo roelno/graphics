@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #define USECPP 0
+#define PI 3.14159265358979323846
 
 int main(int argc, char *argv[]) {
   Pixel *image;
@@ -20,6 +21,10 @@ int main(int argc, char *argv[]) {
   int redDecreaseFactor = 50;   // Amount to decrease red color
   int greenIncreaseFactor = 30; // Amount to increase green color
   float rampFactor;             // Factor to apply the ramp effect
+  float amplitude = 50.0;       // Amplitude of the sine wave
+  float frequency = 2.0;        // Frequency of the sine wave
+  float phaseShift = 0;         // Phase shift of the sine wave
+  float waveValue;              // Value from the sine wave
 
   if (argc < 3) {
     printf("Usage: ppmtest <input file> <output file>\n");
@@ -37,7 +42,7 @@ int main(int argc, char *argv[]) {
   imagesize = (long)rows * (long)cols;
 
   /* mess with the image here  */
-  /* Adjust colors in the image */
+  /* Adjust colors in the image: make red flower more red and leaves more green */
   for (i = 0; i < imagesize; i++) {
     // Decrease redness in specific red range
     if (image[i].r > 100 && image[i].r < 200) {
@@ -67,6 +72,22 @@ int main(int argc, char *argv[]) {
       image[i].r = (int)(image[i].r * rampFactor);
       image[i].g = (int)(image[i].g * rampFactor);
       image[i].b = (int)(image[i].b * rampFactor);
+    }
+  }
+
+  /* Overlay a sine wave */
+  for (int y = 0; y < rows; y++) {
+    for (int x = 0; x < cols; x++) {
+      i = y * cols + x; // Index of the pixel in the linear array
+
+      // Calculate sine wave based on the x position
+      waveValue =
+          amplitude * sin((x / (float)cols) * frequency * 2 * PI + phaseShift);
+
+      // Apply the wave as a brightness change
+      image[i].r = fmin(fmax(image[i].r + waveValue, 0), 255);
+      image[i].g = fmin(fmax(image[i].g + waveValue, 0), 255);
+      image[i].b = fmin(fmax(image[i].b + waveValue, 0), 255);
     }
   }
 
