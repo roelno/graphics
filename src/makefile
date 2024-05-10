@@ -61,6 +61,8 @@ ppmtest: $(ODIR)/ppmmain.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 lab1: $(ODIR)/lab1.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
+first_program: $(ODIR)/first_program.o
+	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 
 .PHONY: clean
 
