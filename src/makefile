@@ -61,7 +61,9 @@ ppmtest: $(ODIR)/ppmmain.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 lab1: $(ODIR)/lab1.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
-first_program: $(ODIR)/first_program.o
+1_generate_mask: $(ODIR)/1_generate_mask.o
+	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
+2_image_blend: $(ODIR)/2_image_blend.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 
 .PHONY: clean

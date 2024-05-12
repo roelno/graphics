@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
   Pixel *image;
-  unsigned char *mask;
+  Pixel *mask;
   int rows, cols, colors;
   long imagesize;
   long i;
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* Allocate memory for the mask */
-  mask = (unsigned char *)malloc(rows * cols);
+  mask = (Pixel *)malloc(rows * cols * sizeof(Pixel));
   if (!mask) {
     fprintf(stderr, "Unable to allocate memory for mask\n");
     exit(-1);
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   /* calculate the image size */
   imagesize = (long)rows * (long)cols;
 
-  /* Create the mask based on the blue or green threshold */
+  /* create the mask based on the blue or green threshold */
   for (i = 0; i < imagesize; i++) {
     float r, g, b , max_color, norm_factor;
     r = image[i].r;
@@ -52,21 +52,19 @@ int main(int argc, char *argv[]) {
 
     if ((maskColor == 'b' && ((b - r) > COLOR_THRESHOLD) && ((b - g) > COLOR_THRESHOLD)) ||
         (maskColor == 'g' && ((g - r) > COLOR_THRESHOLD) && ((g - b) > COLOR_THRESHOLD))) {
-      mask[i] = 0; // Background
+      mask[i].r = 0; // Background
+      mask[i].g = 0;
+      mask[i].b = 0;
     } else {
-      mask[i] = 255; // Foreground
+      mask[i].r = 255; // Foreground
+      mask[i].g = 255;
+      mask[i].b = 255;
     }
   }
 
-  /* Apply the mask to the image */
-  for (i = 0; i < imagesize; i++) {
-    image[i].r = image[i].r & mask[i];
-    image[i].g = image[i].g & mask[i];
-    image[i].b = image[i].b & mask[i];
-  }
+  /* Output the mask */
+  writePPM(mask, rows, cols, colors, argv[2]);
 
-  /* write out the resulting image */
-  writePPM(image, rows, cols, colors /* s/b 255 */, argv[2]);
 
   /* free the image memory */
 #if USECPP
