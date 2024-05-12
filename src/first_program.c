@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #define USECPP 0
-#define SUM_THRESHOLD 320
 #define COLOR_THRESHOLD 10
 
 int main(int argc, char *argv[]) {
@@ -40,16 +39,19 @@ int main(int argc, char *argv[]) {
 
   /* Create the mask based on the blue or green threshold */
   for (i = 0; i < imagesize; i++) {
-    if ((maskColor == 'b' && (image[i].b > image[i].r) &&
-         ((image[i].b - image[i].r) > COLOR_THRESHOLD) &&
-         (image[i].b > image[i].g) &&
-         ((image[i].b - image[i].g) > COLOR_THRESHOLD) &&
-         (image[i].b + image[i].r + image[i].b < SUM_THRESHOLD)) || // and if the pixel is dark enough
-        (maskColor == 'g' && (image[i].g > image[i].r) &&
-         ((image[i].g - image[i].r) > COLOR_THRESHOLD) &&
-         (image[i].g > image[i].b) &&
-         ((image[i].g - image[i].b) > COLOR_THRESHOLD) &&
-         (image[i].b + image[i].r + image[i].b < SUM_THRESHOLD))) { // and if the pixel is dark enough
+    float r, g, b , max_color, norm_factor;
+    r = image[i].r;
+    g = image[i].g;
+    b = image[i].b;
+    max_color = r > g ? r : g;
+    max_color = max_color > b ? max_color : b;
+    norm_factor = 255 / max_color;
+    r *= norm_factor;
+    g *= norm_factor;
+    b *= norm_factor;
+
+    if ((maskColor == 'b' && ((b - r) > COLOR_THRESHOLD) && ((b - g) > COLOR_THRESHOLD)) ||
+        (maskColor == 'g' && ((g - r) > COLOR_THRESHOLD) && ((g - b) > COLOR_THRESHOLD))) {
       mask[i] = 0; // Background
     } else {
       mask[i] = 255; // Foreground
