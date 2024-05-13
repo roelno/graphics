@@ -9,6 +9,9 @@
  * and blend the foreground and background images together using the mask
  * to create a new image */
 
+/* Compile with: ../bin/2_image_blend powerpuff.ppm background.ppm
+ * mask_powerpuff.ppm blend_result_powerpuff.ppm */
+
 int main(int argc, char *argv[]) {
   Pixel *foreground, *background, *output;
   Pixel *mask;
@@ -59,8 +62,8 @@ int main(int argc, char *argv[]) {
     float beta = mask[i].r / 255.0;
     float gamma = mask[i].b / 255.0;
     // float alpha = 1;
-    output[i].r = (unsigned char)(beta * foreground[i].r +
-                                  (1 - beta) * background[i].r);
+    output[i].r =
+        (unsigned char)(beta * foreground[i].r + (1 - beta) * background[i].r);
     output[i].g = (unsigned char)(alpha * foreground[i].g +
                                   (1 - alpha) * background[i].g);
     output[i].b = (unsigned char)(gamma * foreground[i].b +
@@ -69,7 +72,6 @@ int main(int argc, char *argv[]) {
 
   /* output the blended image */
   writePPM(output, rows, cols, 255, argv[4]);
-
 
   // Free memory
 #if USECPP
