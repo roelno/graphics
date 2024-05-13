@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define USECPP 0
-#define COLOR_THRESHOLD 10
+#define COLOR_THRESHOLD 30
 
 int main(int argc, char *argv[]) {
   Pixel *image;
@@ -39,16 +39,11 @@ int main(int argc, char *argv[]) {
 
   /* create the mask based on the blue or green threshold */
   for (i = 0; i < imagesize; i++) {
-    float r, g, b , max_color, norm_factor;
+    float r, g, b;
     r = image[i].r;
     g = image[i].g;
     b = image[i].b;
-    max_color = r > g ? r : g;
-    max_color = max_color > b ? max_color : b;
-    norm_factor = 255 / max_color;
-    r *= norm_factor;
-    g *= norm_factor;
-    b *= norm_factor;
+
 
     if ((maskColor == 'b' && ((b - r) > COLOR_THRESHOLD) && ((b - g) > COLOR_THRESHOLD)) ||
         (maskColor == 'g' && ((g - r) > COLOR_THRESHOLD) && ((g - b) > COLOR_THRESHOLD))) {
