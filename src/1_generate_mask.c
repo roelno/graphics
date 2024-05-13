@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define USECPP 0
-#define COLOR_THRESHOLD 30
+#define COLOR_THRESHOLD 30 // for in-between values of blue and green
 
 int main(int argc, char *argv[]) {
   Pixel *image;
