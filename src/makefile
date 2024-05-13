@@ -67,6 +67,8 @@ lab1: $(ODIR)/lab1.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 3_image_blend_offset: $(ODIR)/3_image_blend_offset.o
 	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
+4_image_blend_scale: $(ODIR)/4_image_blend_scale.o
+	$(CC) -o $(BINDIR)/$@ $^ $(LFLAGS) $(LIBS)
 
 .PHONY: clean
 
