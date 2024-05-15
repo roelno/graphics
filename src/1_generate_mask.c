@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define USECPP 0
-#define COLOR_THRESHOLD 30 // for in-between values of blue and green
+// #define COLOR_THRESHOLD 30 // for in-between values of blue and green
 
 int main(int argc, char *argv[]) {
   Pixel *image;
@@ -44,9 +44,14 @@ int main(int argc, char *argv[]) {
     g = image[i].g;
     b = image[i].b;
 
-
-    if ((maskColor == 'b' && ((b - r) > COLOR_THRESHOLD) && ((b - g) > COLOR_THRESHOLD)) ||
-        (maskColor == 'g' && ((g - r) > COLOR_THRESHOLD) && ((g - b) > COLOR_THRESHOLD))) {
+    // if ((maskColor == 'b' && ((b - r) > COLOR_THRESHOLD) && ((b - g) >
+    // COLOR_THRESHOLD)) ||
+    //     (maskColor == 'g' && ((g - r) > COLOR_THRESHOLD) && ((g - b) >
+    //     COLOR_THRESHOLD))) {
+    if ((maskColor == 'b' && (b > (4.0 / 3.0) * g) && (b > (4.0 / 3.0) * r) &&
+         (b > 50)) ||
+        (maskColor == 'g' && (g > (4.0 / 3.0) * b) && (g > (4.0 / 3.0) * r) &&
+         (g > 50))) {
       mask[i].r = 0; // Background
       mask[i].g = 0;
       mask[i].b = 0;
@@ -59,7 +64,6 @@ int main(int argc, char *argv[]) {
 
   /* Output the mask */
   writePPM(mask, rows, cols, colors, argv[2]);
-
 
   /* free the image memory */
 #if USECPP
